@@ -1,17 +1,33 @@
 <?php
 
-// Build a 4 x 4 grid 
-$grid = [
-    ["🐮", "🐸", "🐹", "🐯"],
-    ["🐮", "🐸", "🐹", "🐯"],
-    ["🐮", "🐸", "🐹", "🐯"],
-    ["🐮", "🐸", "🐹", "🐯"],
-];
+session_start();
+//session_unset();
 
-// Shuffle the grid
-for ($i = 0; $i < count($grid); $i++) {
-    shuffle($grid[$i]);
+if (!isset($_SESSION['grid'])) {
+    $grid = [
+        ["🐮", "🐸", "🐹", "🐯"],
+        ["🐮", "🐸", "🐹", "🐯"],
+        ["🐮", "🐸", "🐹", "🐯"],
+        ["🐮", "🐸", "🐹", "🐯"],
+    ];
+
+    // Shuffle the grid
+    for ($i = 0; $i < count($grid); $i++) {
+        shuffle($grid[$i]);
+    }
+
+    $_SESSION['grid'] = $grid;
+} else {
+    $grid = $_SESSION['grid'];
+
+    // Test to push an item into the grid
+    $randomRownumber = mt_rand(1, 4);
 }
+
+
+// Function that checks if a row or column is all of the same animal.
+
+
 
 ?>
 
@@ -28,14 +44,30 @@ for ($i = 0; $i < count($grid); $i++) {
 <body>
     <section id="grid">
         <?php
-        foreach ($grid as $row) {
-            foreach ($row as $square) {
+        for ($i = 0; $i < 6; $i++) {
         ?>
+            <article class="button-<?= $i; ?>"><button>⬇️</button></article>
+        <?php
+        }
+        foreach ($grid as $row) {
+        ?>
+            <article><button>➡️</button></article>
+            <?php
+            foreach ($row as $square) {
+            ?>
                 <article>
                     <?= $square; ?>
                 </article>
-        <?php
+            <?php
             }
+            ?>
+            <article><button>⬅️</button></article>
+        <?php
+        }
+        for ($i = 0; $i < 6; $i++) {
+        ?>
+            <article class=" button-<?= $i; ?>"><button>⬆️</button></article>
+        <?php
         }
         ?>
     </section>
