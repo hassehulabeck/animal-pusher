@@ -1,7 +1,8 @@
 <?php
 
 session_start();
-//session_unset();
+session_unset();
+
 
 if (!isset($_SESSION['grid'])) {
     $grid = [
@@ -16,7 +17,14 @@ if (!isset($_SESSION['grid'])) {
         shuffle($grid[$i]);
     }
 
-    transpose($grid);
+    $grid = transpose($grid);
+
+    // Shuffle the grid
+    for ($i = 0; $i < count($grid); $i++) {
+        shuffle($grid[$i]);
+    }
+
+    $grid = transpose($grid);
 
 
     $_SESSION['grid'] = $grid;
@@ -32,11 +40,14 @@ function transpose($array)
 {
     $returnArray = [];
     // Pick all the first squares from each row, make them into an array.
+
+    // BETTER. Flatten the grid, then randomize the picking to fill another
     foreach ($array as $index => $row) {
         foreach ($row as $i => $square) {
             $returnArray[$i][$index] = $square;
         }
     }
+    return $returnArray;
 }
 
 // Function that checks if a row or column is all of the same animal.
