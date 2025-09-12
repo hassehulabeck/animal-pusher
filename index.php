@@ -1,7 +1,13 @@
 <?php
 
 session_start();
-session_unset();
+//session_unset();
+
+if (isset($_POST)) {
+    var_dump($_POST);
+}
+
+
 
 
 if (!isset($_SESSION['grid'])) {
@@ -12,7 +18,7 @@ if (!isset($_SESSION['grid'])) {
         ["🐮", "🐸", "🐹", "🐯"],
     ];
 
-    // Shuffle the grid
+    // Shuffle the grid, then transpose it and shuffle again.
     for ($i = 0; $i < count($grid); $i++) {
         shuffle($grid[$i]);
     }
@@ -23,8 +29,6 @@ if (!isset($_SESSION['grid'])) {
     for ($i = 0; $i < count($grid); $i++) {
         shuffle($grid[$i]);
     }
-
-    $grid = transpose($grid);
 
 
     $_SESSION['grid'] = $grid;
@@ -52,6 +56,8 @@ function transpose($array)
 
 // Function that checks if a row or column is all of the same animal.
 
+// Function that reacts on buttons
+
 
 
 ?>
@@ -67,35 +73,37 @@ function transpose($array)
 </head>
 
 <body>
-    <section id="grid">
-        <?php
-        for ($i = 0; $i < 6; $i++) {
-        ?>
-            <article class="button-<?= $i; ?>"><button>⬇️</button></article>
-        <?php
-        }
-        foreach ($grid as $row) {
-        ?>
-            <article><button>➡️</button></article>
+    <form action="/" method="post">
+        <section id="grid">
             <?php
-            foreach ($row as $square) {
+            for ($i = 0; $i < 6; $i++) {
             ?>
-                <article>
-                    <?= $square; ?>
-                </article>
+                <article class="button-<?= $i; ?>"><button type="submit" name="down" value="<?= $i; ?>">⬇️</button></article>
+            <?php
+            }
+            foreach ($grid as $index => $row) {
+            ?>
+                <article><button type="submit" name="right" value="<?= ++$index; ?>">➡️</button></article>
+                <?php
+                foreach ($row as $square) {
+                ?>
+                    <article>
+                        <?= $square; ?>
+                    </article>
+                <?php
+                }
+                ?>
+                <article><button type="submit" name="left" value="<?= $index; ?>">⬅️</button></article>
+            <?php
+            }
+            for ($i = 0; $i < 6; $i++) {
+            ?>
+                <article class=" button-<?= $i; ?>"><button type="submit" name="up" value="<?= $i; ?>">⬆️</button></article>
             <?php
             }
             ?>
-            <article><button>⬅️</button></article>
-        <?php
-        }
-        for ($i = 0; $i < 6; $i++) {
-        ?>
-            <article class=" button-<?= $i; ?>"><button>⬆️</button></article>
-        <?php
-        }
-        ?>
-    </section>
+        </section>
+    </form>
 </body>
 
 </html>
