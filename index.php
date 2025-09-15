@@ -39,13 +39,31 @@ if (!isset($_SESSION['grid'])) {
 // Function that reacts on buttons
 if (isset($_POST)) {
     $temp = null;
+    $tempColumn = [];
     if (isset($_POST['right'])) {
-        //$temp = $grid[$_POST['right'] - 1][3];
         $temp = array_pop($grid[$_POST['right'] - 1]);
-        // var_dump($temp);
         array_unshift($grid[$_POST['right'] - 1], $temp);
-        $_SESSION['grid'] = $grid;
     }
+    if (isset($_POST['left'])) {
+        $temp = array_shift($grid[$_POST['left'] - 1]);
+        array_push($grid[$_POST['left'] - 1], $temp);
+    }
+    if (isset($_POST['down'])) {
+        // Create an array of the items in the column
+        foreach ($grid as $row) {
+            $tempColumn[] = $row[$_POST['down'] - 1];
+        }
+        // Modify that column arraywise
+        $temp = array_pop($tempColumn);
+        array_unshift($tempColumn, $temp);
+
+        // Merge the new values into the grid
+        foreach ($tempColumn as $index => $item) {
+            $grid[$index][$_POST['down'] - 1] = $item;
+        }
+    }
+    // Store the changes to the session
+    $_SESSION['grid'] = $grid;
 }
 
 // Transpose the array
