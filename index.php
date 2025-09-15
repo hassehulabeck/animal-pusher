@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-var_dump($_SESSION);
+//var_dump($_SESSION);
 //session_unset();
 $moves = 0;
 
@@ -34,12 +34,11 @@ if (!isset($_SESSION['grid'])) {
     $moves = $_SESSION['moves'];
 }
 
-// Function that reacts on buttons
-if (isset($_POST)) {
+// Function that reacts on buttons - don't just check isset($_POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $temp = null;
     $tempColumn = [];
 
-    $moves++;
 
     if (isset($_POST['right'])) {
         $temp = array_pop($grid[$_POST['right'] - 1]);
@@ -78,6 +77,7 @@ if (isset($_POST)) {
         }
     }
     // Store the changes to the session
+    $moves++;
     $_SESSION['grid'] = $grid;
     $_SESSION['moves'] = $moves;
 }
