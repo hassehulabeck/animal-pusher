@@ -3,9 +3,6 @@
 session_start();
 //session_unset();
 
-if (isset($_POST)) {
-    var_dump($_POST);
-}
 
 
 
@@ -39,6 +36,18 @@ if (!isset($_SESSION['grid'])) {
     $randomRownumber = mt_rand(1, 4);
 }
 
+// Function that reacts on buttons
+if (isset($_POST)) {
+    $temp = null;
+    if (isset($_POST['right'])) {
+        //$temp = $grid[$_POST['right'] - 1][3];
+        $temp = array_pop($grid[$_POST['right'] - 1]);
+        // var_dump($temp);
+        array_unshift($grid[$_POST['right'] - 1], $temp);
+        $_SESSION['grid'] = $grid;
+    }
+}
+
 // Transpose the array
 function transpose($array)
 {
@@ -56,7 +65,6 @@ function transpose($array)
 
 // Function that checks if a row or column is all of the same animal.
 
-// Function that reacts on buttons
 
 
 
