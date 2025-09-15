@@ -62,6 +62,20 @@ if (isset($_POST)) {
             $grid[$index][$_POST['down'] - 1] = $item;
         }
     }
+    if (isset($_POST['up'])) {
+        // Create an array of the items in the column
+        foreach ($grid as $row) {
+            $tempColumn[] = $row[$_POST['up'] - 1];
+        }
+        // Modify that column arraywise
+        $temp = array_shift($tempColumn);
+        array_push($tempColumn, $temp);
+
+        // Merge the new values into the grid
+        foreach ($tempColumn as $index => $item) {
+            $grid[$index][$_POST['up'] - 1] = $item;
+        }
+    }
     // Store the changes to the session
     $_SESSION['grid'] = $grid;
 }

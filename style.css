@@ -7,8 +7,6 @@ body {
 
 #grid {
     background-color: white;
-    max-width: 85%;
-    padding-top: 3rem;
     display: grid;
     grid-template-columns: repeat(6, 3rem);
     flex-wrap: wrap;
