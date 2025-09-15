@@ -2,7 +2,6 @@
 
 session_start();
 //var_dump($_SESSION);
-//session_unset();
 $moves = 0;
 
 if (!isset($_SESSION['grid'])) {
@@ -35,7 +34,7 @@ if (!isset($_SESSION['grid'])) {
 }
 
 // Function that reacts on buttons - don't just check isset($_POST)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['reset'])) {
     $temp = null;
     $tempColumn = [];
 
@@ -82,6 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['moves'] = $moves;
 }
 
+if (isset($_POST['reset'])) {
+    session_unset();
+}
+
 // Transpose the array
 function transpose($array)
 {
@@ -116,6 +119,9 @@ function transpose($array)
 
 <body>
     <p><?= $moves; ?> moves made.</p>
+    <form action="/" method="post">
+        <button type="submit" name="reset">New game</button>
+    </form>
     <form action="/" method="post">
         <section id="grid">
             <?php
