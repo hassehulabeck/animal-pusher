@@ -1,6 +1,6 @@
 # Animalpusher
 
-!['grid.png'](Grid)
+<img src='./grid.png' width="50%" />
 
 The students at WU25 got to play the somewhat unfinished game "Snowy, the pusher" during their pen-and-paper-code day. This repository is a try to create a digital version of the game, using PHP.
 
