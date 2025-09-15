@@ -15,3 +15,6 @@ The students at WU25 got to play the somewhat unfinished game "Snowy, the pusher
 
 Yes, if you want to. There might be some issues up for grabs, and if not, create a PR and let me take a look.
 
+## Gameplay
+
+At the moment, the aim of the game is to manipulate the grid so that every animal type is ordered in a row or a column in the fewest moves possible.
