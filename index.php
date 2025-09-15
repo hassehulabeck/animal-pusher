@@ -1,11 +1,9 @@
 <?php
 
 session_start();
+var_dump($_SESSION);
 //session_unset();
-
-
-
-
+$moves = 0;
 
 if (!isset($_SESSION['grid'])) {
     $grid = [
@@ -14,6 +12,7 @@ if (!isset($_SESSION['grid'])) {
         ["🐮", "🐸", "🐹", "🐯"],
         ["🐮", "🐸", "🐹", "🐯"],
     ];
+
 
     // Shuffle the grid, then transpose it and shuffle again.
     for ($i = 0; $i < count($grid); $i++) {
@@ -29,17 +28,19 @@ if (!isset($_SESSION['grid'])) {
 
 
     $_SESSION['grid'] = $grid;
+    $_SESSION['moves'] = $moves;
 } else {
     $grid = $_SESSION['grid'];
-
-    // Test to push an item into the grid
-    $randomRownumber = mt_rand(1, 4);
+    $moves = $_SESSION['moves'];
 }
 
 // Function that reacts on buttons
 if (isset($_POST)) {
     $temp = null;
     $tempColumn = [];
+
+    $moves++;
+
     if (isset($_POST['right'])) {
         $temp = array_pop($grid[$_POST['right'] - 1]);
         array_unshift($grid[$_POST['right'] - 1], $temp);
@@ -78,6 +79,7 @@ if (isset($_POST)) {
     }
     // Store the changes to the session
     $_SESSION['grid'] = $grid;
+    $_SESSION['moves'] = $moves;
 }
 
 // Transpose the array
@@ -113,6 +115,7 @@ function transpose($array)
 </head>
 
 <body>
+    <p><?= $moves; ?> moves made.</p>
     <form action="/" method="post">
         <section id="grid">
             <?php
