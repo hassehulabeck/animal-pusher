@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['reset'])) {
 
 if (isset($_POST['reset'])) {
     session_unset();
+    header('Location: index.php');
 }
 
 // Transpose the array
@@ -118,11 +119,15 @@ function transpose($array)
 </head>
 
 <body>
-    <p><?= $moves; ?> moves made.</p>
-    <form action="/" method="post">
-        <button type="submit" name="reset">New game</button>
-    </form>
-    <form action="/" method="post">
+    <section id="info">
+        <h4><?= $moves; ?> moves made.</h4>
+        <p>The aim of the game is to manipulate the grid so that every animal type is gathered in a row or a column in the fewest moves possible.</p>
+        <form action="index.php" method="post">
+            <button type="submit" name="reset">New game</button>
+        </form>
+    </section>
+    <section id="playarea">
+    <form action="index.php" method="post">
         <section id="grid">
             <?php
             for ($i = 0; $i < 6; $i++) {
@@ -153,6 +158,7 @@ function transpose($array)
             ?>
         </section>
     </form>
+    </section>
 </body>
 
 </html>

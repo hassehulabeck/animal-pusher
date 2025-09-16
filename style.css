@@ -4,7 +4,14 @@ body {
     padding: 1rem;
     background-color: antiquewhite;
 }
-
+#info {
+    flex: 2;
+}
+#playarea {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+}
 #grid {
     background-color: white;
     display: grid;
