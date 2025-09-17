@@ -33,58 +33,6 @@ if (!isset($_SESSION['grid'])) {
     $moves = $_SESSION['moves'];
 }
 
-// Function that reacts on buttons - don't just check isset($_POST)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['reset'])) {
-    $temp = null;
-    $tempColumn = [];
-
-
-    if (isset($_POST['right'])) {
-        $temp = array_pop($grid[$_POST['right'] - 1]);
-        array_unshift($grid[$_POST['right'] - 1], $temp);
-    }
-    if (isset($_POST['left'])) {
-        $temp = array_shift($grid[$_POST['left'] - 1]);
-        array_push($grid[$_POST['left'] - 1], $temp);
-    }
-    if (isset($_POST['down'])) {
-        // Create an array of the items in the column
-        foreach ($grid as $row) {
-            $tempColumn[] = $row[$_POST['down'] - 1];
-        }
-        // Modify that column arraywise
-        $temp = array_pop($tempColumn);
-        array_unshift($tempColumn, $temp);
-
-        // Merge the new values into the grid
-        foreach ($tempColumn as $index => $item) {
-            $grid[$index][$_POST['down'] - 1] = $item;
-        }
-    }
-    if (isset($_POST['up'])) {
-        // Create an array of the items in the column
-        foreach ($grid as $row) {
-            $tempColumn[] = $row[$_POST['up'] - 1];
-        }
-        // Modify that column arraywise
-        $temp = array_shift($tempColumn);
-        array_push($tempColumn, $temp);
-
-        // Merge the new values into the grid
-        foreach ($tempColumn as $index => $item) {
-            $grid[$index][$_POST['up'] - 1] = $item;
-        }
-    }
-    // Store the changes to the session
-    $moves++;
-    $_SESSION['grid'] = $grid;
-    $_SESSION['moves'] = $moves;
-}
-
-if (isset($_POST['reset'])) {
-    session_unset();
-    header('Location: index.php');
-}
 
 // Transpose the array
 function transpose($array)
@@ -101,8 +49,21 @@ function transpose($array)
     return $returnArray;
 }
 
-// Function that checks if a row or column is all of the same animal.
+function isGridSolved($grid) {
+    $isSolved = [];
+    // Note. This function is only testing the rows, so it needs to be used twice, with a call to transpose in between.
+    foreach($grid as $row) {
+        $isSolved[] = array_all($row, function($square) use ($row) {
+            return $square == $row[0];
+        });
+    }
+    if (count(array_diff($isSolved, [true, true, true, true])) == 0) {
+        return true;
+    }
+}
 
+// Function that checks if a row or column is all of the same animal.
+require_once __DIR__ . '/posthandling.php'
 
 
 
@@ -127,37 +88,37 @@ function transpose($array)
         </form>
     </section>
     <section id="playarea">
-    <form action="index.php" method="post">
-        <section id="grid">
-            <?php
-            for ($i = 0; $i < 6; $i++) {
-            ?>
-                <article class="button-<?= $i; ?>"><button type="submit" name="down" value="<?= $i; ?>">⬇️</button></article>
-            <?php
-            }
-            foreach ($grid as $index => $row) {
-            ?>
-                <article><button type="submit" name="right" value="<?= ++$index; ?>">➡️</button></article>
+        <form action="index.php" method="post">
+            <section id="grid">
                 <?php
-                foreach ($row as $square) {
+                for ($i = 0; $i < 6; $i++) {
                 ?>
-                    <article>
-                        <?= $square; ?>
-                    </article>
+                    <article class="button-<?= $i; ?>"><button type="submit" name="down" value="<?= $i; ?>">⬇️</button></article>
+                <?php
+                }
+                foreach ($grid as $index => $row) {
+                ?>
+                    <article><button type="submit" name="right" value="<?= ++$index; ?>">➡️</button></article>
+                    <?php
+                    foreach ($row as $square) {
+                    ?>
+                        <article>
+                            <?= $square; ?>
+                        </article>
+                    <?php
+                    }
+                    ?>
+                    <article><button type="submit" name="left" value="<?= $index; ?>">⬅️</button></article>
+                <?php
+                }
+                for ($i = 0; $i < 6; $i++) {
+                ?>
+                    <article class=" button-<?= $i; ?>"><button type="submit" name="up" value="<?= $i; ?>">⬆️</button></article>
                 <?php
                 }
                 ?>
-                <article><button type="submit" name="left" value="<?= $index; ?>">⬅️</button></article>
-            <?php
-            }
-            for ($i = 0; $i < 6; $i++) {
-            ?>
-                <article class=" button-<?= $i; ?>"><button type="submit" name="up" value="<?= $i; ?>">⬆️</button></article>
-            <?php
-            }
-            ?>
-        </section>
-    </form>
+            </section>
+        </form>
     </section>
 </body>
 
